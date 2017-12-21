@@ -1,0 +1,38 @@
+\documentclass{jsarticle}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\makeatletter
+  \def\local@originalLessThan{<}
+  \catcode`\<=13\relax
+%  \mathcode`\<="8000\relax%"
+  \def<{\futurelet\local@temp@nextToken\local@lessThanI}
+  \def\local@lessThanI{%
+    \ifx=\local@temp@nextToken\relax
+      \def\local@temp@nextCommand##1{\futurelet\local@temp@nextToken\local@lessThanII}%
+    \else
+      \def\local@temp@nextCommand{\local@originalLessThan}%
+    \fi
+    \local@temp@nextCommand
+  }
+  \def\local@lessThanII{%
+    \ifx=\local@temp@nextToken\relax
+      \def\local@temp@nextCommand##1{\futurelet\local@temp@nextToken\local@lessThanIII}%
+    \else
+      \def\local@temp@nextCommand{\local@originalLessThan=}%
+    \fi
+    \local@temp@nextCommand
+  }
+  \def\local@lessThanIII{%
+    \ifx>\local@temp@nextToken\relax
+      \def\local@temp@nextCommand##1{\Longleftrightarrow}%
+    \else
+      \def\local@temp@nextCommand{\local@originalLessThan==}%
+    \fi
+    \local@temp@nextCommand
+  }
+\makeatother
+\begin{document}
+  \begin{equation}
+    a < b <==> b > a
+  \end{equation}
+\end{document}
